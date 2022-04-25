@@ -170,20 +170,9 @@ void GrayFilter(
 			}
 
 			unsigned char result =
-				// top row
-				f1 +
-				f2 * (-2) +
-				f3 +
-
-				// middle row
-				f4 * (-2) +
-				f5 * 4 +
-				f6 * (-2) +
-
-				//bottom row
-				f7 +
-				f8 * (-2) +
-				f9;
+				f1 + f2 * (-2) + f3 +
+				f4 * (-2) + f5 * 4 + f6 * (-2) +
+				f7 + f8 * (-2) + f9;
 
 			unsigned char res = 0;
 			for (int g = 0; g < 8; g++)
@@ -199,7 +188,7 @@ void GrayFilter(
 }
 
 
-void HostGrayDenoising(
+void HostGrayFilter(
 	unsigned char* inputData,
 	unsigned char* outputData,
 	const int w,
@@ -414,13 +403,13 @@ void RgbFilter(
 				res.r |= (result.r & 1);
 				result.r >>= 1;
 			}
-			outputData[y * w + x] = res;
+			outputData[(y - 1) * w + x - 1] = res;
 
 		}
 	}
 }
 
-void HostRgbDenoising(
+void HostRgbFilter(
 	RGB* inputData,
 	RGB* outputData,
 	const int w,

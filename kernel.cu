@@ -58,7 +58,7 @@ void StartHostGray(
 )
 {
 	auto start_cpu = chrono::steady_clock::now();
-	HostGrayDenoising(inputDataRgb, hostResult, w, h);
+	HostGrayFilter(inputDataRgb, hostResult, w, h);
 	auto end_cpu = chrono::steady_clock::now();
 	auto cpu_time = end_cpu - start_cpu;
 	cout << "Host time (Gray): " << chrono::duration<double, milli>(cpu_time).count() << endl << endl;
@@ -142,7 +142,7 @@ void StartHostRGB(
 )
 {
 	auto start_cpu = chrono::steady_clock::now();
-	HostRgbDenoising(inputDataRgb, hostResult, w, h);
+	HostRgbFilter(inputDataRgb, hostResult, w, h);
 	auto end_cpu = chrono::steady_clock::now();
 	auto cpu_time = end_cpu - start_cpu;
 	cout << "Host time (RGB): " << chrono::duration<double, milli>(cpu_time).count() << endl << endl;

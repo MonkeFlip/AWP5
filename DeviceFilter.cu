@@ -553,34 +553,38 @@ __global__ void DeviceRgbFilter(
 		if (threadIdx.x == 0 && threadIdx.y == 0)
 		{
 			mem = corners[0];
-			int_1.x = mem.y;
-			int_1.y = mem.z;
-			int_1.z = mem.w;
-			int_1.w = top_extension[0][0].x;
+			int_1.x = mem.w;
+			mem = top_extension[0][0];
+			int_1.y = mem.x;
+			int_1.z = mem.y;
+			int_1.w = mem.z;
 		}
 		else if (threadIdx.x == 0)
 		{
 			mem = left_extension[0][threadIdx.y];
-			int_1.x = mem.y;
-			int_1.y = mem.z;
-			int_1.z = mem.w;
-			int_1.w = shared_memory[threadIdx.y - 1][threadIdx.x].x;
+			int_1.x = mem.w;
+			mem = shared_memory[threadIdx.y - 1][threadIdx.x];
+			int_1.y = mem.x;
+			int_1.z = mem.y;
+			int_1.w = mem.z;
 		}
 		else if (threadIdx.y == 0)
 		{
 			mem = top_extension[0][threadIdx.x - 1];
-			int_1.x = mem.y;
-			int_1.y = mem.z;
-			int_1.z = mem.w;
-			int_1.w = top_extension[0][threadIdx.x].x;
+			int_1.x = mem.w;
+			mem = top_extension[0][threadIdx.x];
+			int_1.y = mem.x;
+			int_1.z = mem.y;
+			int_1.w = mem.z;
 		}
 		else
 		{
 			mem = shared_memory[threadIdx.y - 1][threadIdx.x - 1];
-			int_1.x = mem.y;
-			int_1.y = mem.z;
-			int_1.z = mem.w;
-			int_1.w = shared_memory[threadIdx.y - 1][threadIdx.x].x;
+			int_1.x = mem.w;
+			mem = shared_memory[threadIdx.y - 1][threadIdx.x];
+			int_1.y = mem.x;
+			int_1.z = mem.y;
+			int_1.w = mem.z;
 		}
 		result = 0;
 		value = int_1.x;
@@ -622,18 +626,20 @@ __global__ void DeviceRgbFilter(
 		if (threadIdx.y == 0)
 		{
 			mem = top_extension[0][threadIdx.x];
-			int_2.x = mem.y;
-			int_2.y = mem.z;
-			int_2.z = mem.w;
-			int_2.w = threadIdx.x == THREADS_X - 1 ? corners[1].x : top_extension[0][threadIdx.x + 1].x;
+			int_2.x = mem.w;
+			mem = threadIdx.x == THREADS_X - 1 ? corners[1] : top_extension[0][threadIdx.x + 1];
+			int_2.y = mem.x;
+			int_2.z = mem.y;
+			int_2.w = mem.z;
 		}
 		else
 		{
 			mem = shared_memory[threadIdx.y - 1][threadIdx.x];
-			int_2.x = mem.y;
-			int_2.y = mem.z;
-			int_2.z = mem.w;
-			int_2.w = shared_memory[threadIdx.y - 1][threadIdx.x + 1].x;
+			int_2.x = mem.w;
+			mem = shared_memory[threadIdx.y - 1][threadIdx.x + 1];
+			int_2.y = mem.x;
+			int_2.z = mem.y;
+			int_2.w = mem.z;
 		}
 		result = 0;
 		value = int_2.x;
@@ -675,18 +681,20 @@ __global__ void DeviceRgbFilter(
 		if (threadIdx.x == 0)
 		{
 			mem = left_extension[0][threadIdx.y];
-			int_3.x = mem.y;
-			int_3.y = mem.z;
-			int_3.z = mem.w;
-			int_3.w = shared_memory[threadIdx.y][threadIdx.x].x;
+			int_3.x = mem.w;
+			mem = shared_memory[threadIdx.y][threadIdx.x];
+			int_3.y = mem.x;
+			int_3.z = mem.y;
+			int_3.w = mem.z;
 		}
 		else
 		{
 			mem = shared_memory[threadIdx.y][threadIdx.x - 1];
-			int_3.x = mem.y;
-			int_3.y = mem.z;
-			int_3.z = mem.w;
-			int_3.w = shared_memory[threadIdx.y][threadIdx.x].x;
+			int_3.x = mem.w;
+			mem = shared_memory[threadIdx.y][threadIdx.x];
+			int_3.y = mem.x;
+			int_3.z = mem.y;
+			int_3.w = mem.z;
 		}
 		result = 0;
 		value = int_3.x;
@@ -726,10 +734,11 @@ __global__ void DeviceRgbFilter(
 		int_3.w = result;
 		uchar4 int_4;
 		mem = shared_memory[threadIdx.y][threadIdx.x];
-		int_4.x = mem.y;
-		int_4.y = mem.z;
-		int_4.z = mem.w;
-		int_4.w = threadIdx.x == THREADS_X - 1 ? right_extension[0][threadIdx.y].x : shared_memory[threadIdx.y][threadIdx.x + 1].x;
+		int_4.x = mem.w;
+		mem = threadIdx.x == THREADS_X - 1 ? right_extension[0][threadIdx.y] : shared_memory[threadIdx.y][threadIdx.x + 1];
+		int_4.y = mem.x;
+		int_4.z = mem.y;
+		int_4.w = mem.z;
 		result = 0;
 		value = int_4.x;
 		for (int g = 0; g < 8; g++)
@@ -768,10 +777,11 @@ __global__ void DeviceRgbFilter(
 		int_4.w = result;
 		uchar4 int_5;
 		mem = shared_memory[threadIdx.y][threadIdx.x];
-		int_5.x = mem.y;
-		int_5.y = mem.z;
-		int_5.z = mem.w;
-		int_5.w = threadIdx.y == THREADS_Y - 1 || y == h ? bottom_extension[0][threadIdx.x].x : shared_memory[threadIdx.y + 1][threadIdx.x].x;
+		int_5.x = mem.w;
+		mem = threadIdx.y == THREADS_Y - 1 || y == h ? bottom_extension[0][threadIdx.x] : shared_memory[threadIdx.y + 1][threadIdx.x];
+		int_5.y = mem.x;
+		int_5.z = mem.y;
+		int_5.w = mem.z;
 		result = 0;
 		value = int_5.x;
 		for (int g = 0; g < 8; g++)
@@ -810,18 +820,19 @@ __global__ void DeviceRgbFilter(
 		int_5.w = result;
 		uchar4 int_6;
 		mem = threadIdx.y == THREADS_Y - 1 || y == h ? bottom_extension[0][threadIdx.x] : shared_memory[threadIdx.y + 1][threadIdx.x];
-		int_6.x = mem.y;
-		int_6.y = mem.z;
-		int_6.z = mem.w;
+		int_6.x = mem.w;
+		
 		if (threadIdx.x == THREADS_X - 1)
 		{
-			int_6.w = threadIdx.y == THREADS_Y - 1 || y == h ? corners[3].x : shared_memory[threadIdx.y + 1][threadIdx.x + 1].x;
+			mem = threadIdx.y == THREADS_Y - 1 || y == h ? corners[3] : shared_memory[threadIdx.y + 1][threadIdx.x + 1];
 		}
 		else
 		{
-			int_6.w = threadIdx.y == THREADS_Y - 1 || y == h ? bottom_extension[0][threadIdx.x + 1].x : shared_memory[threadIdx.y + 1][threadIdx.x + 1].x;
+			mem = threadIdx.y == THREADS_Y - 1 || y == h ? bottom_extension[0][threadIdx.x + 1] : shared_memory[threadIdx.y + 1][threadIdx.x + 1];
 		}
-
+		int_6.y = mem.x;
+		int_6.z = mem.y;
+		int_6.w = mem.z;
 		result = 0;
 		value = int_6.x;
 		for (int g = 0; g < 8; g++)
@@ -862,18 +873,20 @@ __global__ void DeviceRgbFilter(
 		if (threadIdx.y == 0)
 		{
 			mem = threadIdx.x >= THREADS_X - 1 ? corners[1] : top_extension[0][threadIdx.x + 1];
-			int_7.x = mem.y;
-			int_7.y = mem.z;
-			int_7.z = mem.w;
-			int_7.w = top_extension[0][threadIdx.x + 2].x;
+			int_7.x = mem.w;
+			mem = top_extension[0][threadIdx.x + 2];
+			int_7.y = mem.x;
+			int_7.z = mem.y;
+			int_7.w = mem.z;
 		}
 		else
 		{
 			mem = shared_memory[threadIdx.y - 1][threadIdx.x + 1];
-			int_7.x = mem.y;
-			int_7.y = mem.z;
-			int_7.z = mem.w;
-			int_7.w = shared_memory[threadIdx.y - 1][threadIdx.x + 2].x;
+			int_7.x = mem.w;
+			mem = shared_memory[threadIdx.y - 1][threadIdx.x + 2];
+			int_7.y = mem.x;
+			int_7.z = mem.y;
+			int_7.w = mem.z;
 		}
 		result = 0;
 		value = int_7.x;
@@ -913,10 +926,11 @@ __global__ void DeviceRgbFilter(
 		int_7.w = result;
 		uchar4 int_8;
 		mem = shared_memory[threadIdx.y][threadIdx.x + 1];
-		int_8.x = mem.y;
-		int_8.y = mem.z;
-		int_8.z = mem.z;
-		int_8.w = shared_memory[threadIdx.y][threadIdx.x + 2].x;
+		int_8.x = mem.w;
+		mem = shared_memory[threadIdx.y][threadIdx.x + 2];
+		int_8.y = mem.x;
+		int_8.z = mem.y;
+		int_8.w = mem.z;
 		result = 0;
 		value = int_8.x;
 		for (int g = 0; g < 8; g++)
@@ -963,7 +977,11 @@ __global__ void DeviceRgbFilter(
 			mem = shared_memory[threadIdx.y + 1][threadIdx.x + 1];
 		}
 
-		int_9.x = mem.y;
+		int_9.x = mem.w;
+		mem = shared_memory[threadIdx.y + 1][threadIdx.x + 2];
+		int_9.y = mem.x;
+		int_9.z = mem.y;
+		int_9.w = mem.z;
 		result = 0;
 		value = int_9.x;
 		for (int g = 0; g < 8; g++)
@@ -973,6 +991,33 @@ __global__ void DeviceRgbFilter(
 			value >>= 1;
 		}
 		int_9.x = result;
+		result = 0;
+		value = int_9.y;
+		for (int g = 0; g < 8; g++)
+		{
+			result <<= 1;
+			result |= (value & 1);
+			value >>= 1;
+		}
+		int_9.y = result;
+		result = 0;
+		value = int_9.z;
+		for (int g = 0; g < 8; g++)
+		{
+			result <<= 1;
+			result |= (value & 1);
+			value >>= 1;
+		}
+		int_9.z = result;
+		result = 0;
+		value = int_9.w;
+		for (int g = 0; g < 8; g++)
+		{
+			result <<= 1;
+			result |= (value & 1);
+			value >>= 1;
+		}
+		int_9.w = result;
 
 		generated_int.x = (
 			int_1.y + int_2.x * (-2) + int_2.w +
